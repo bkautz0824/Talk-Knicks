@@ -1,0 +1,103 @@
+// Podcasts Collection
+const podcastsCollection = {
+  name: 'Podcasts',
+  fields: {
+    name: { type: 'string', required: true },
+    description: { type: 'text' },
+    cover_image: { type: 'media', allowedTypes: ['images'] },
+    episodes: {
+      type: 'component',
+      repeatable: true,
+      component: 'episodes',
+      required: true
+    },
+    categories: { type: 'relation', target: 'categories' },
+    active: { type: 'boolean', default: true }
+  }
+};
+
+// Episodes Component
+const episodesComponent = {
+  name: 'Episodes',
+  fields: {
+    title: { type: 'string', required: true },
+    description: { type: 'text' },
+    thumbnail: { type: 'media', allowedTypes: ['images'] },
+    release_date: { type: 'datetime', required: true },
+    duration: { type: 'string' },
+    spotify_url: { type: 'string', format: 'uri' },
+    youtube_url: { type: 'string', format: 'uri' },
+    show_notes: { type: 'richtext' }
+  }
+};
+
+// Articles Collection
+const articlesCollection = {
+  name: 'Articles',
+  fields: {
+    title: { type: 'string', required: true },
+    slug: { type: 'uid', targetField: 'title' },
+    content: { type: 'richtext', required: true },
+    featured_image: { type: 'media', allowedTypes: ['images'] },
+    excerpt: { type: 'text' },
+    author: { type: 'relation', target: 'authors' },
+    publish_date: { type: 'datetime', required: true },
+    categories: { type: 'relation', target: 'categories' },
+    tags: { type: 'relation', target: 'tags' },
+    related_articles: { type: 'relation', target: 'articles' },
+    meta: {
+      type: 'component',
+      component: 'meta',
+      repeatable: false
+    }
+  }
+};
+
+// Living Lists Collection
+const livingListsCollection = {
+  name: 'LivingLists',
+  fields: {
+    title: { type: 'string', required: true },
+    slug: { type: 'uid', targetField: 'title' },
+    description: { type: 'text' },
+    items: {
+      type: 'component',
+      repeatable: true,
+      component: 'list-items',
+      required: true
+    },
+    last_updated: { type: 'datetime', required: true },
+    categories: { type: 'relation', target: 'categories' },
+    active: { type: 'boolean', default: true }
+  }
+};
+
+// List Items Component
+const listItemsComponent = {
+  name: 'ListItems',
+  fields: {
+    rank: { type: 'integer', required: true },
+    title: { type: 'string', required: true },
+    description: { type: 'richtext' },
+    image: { type: 'media', allowedTypes: ['images'] },
+    stats: { type: 'json' },
+    previous_rank: { type: 'integer' },
+    last_updated: { type: 'datetime', required: true },
+    update_history: {
+      type: 'component',
+      repeatable: true,
+      component: 'update-history'
+    }
+  }
+};
+
+// Update History Component
+const updateHistoryComponent = {
+  name: 'UpdateHistory',
+  fields: {
+    date: { type: 'datetime', required: true },
+    note: { type: 'text' },
+    old_rank: { type: 'integer' },
+    new_rank: { type: 'integer' }
+  }
+};
