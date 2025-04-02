@@ -6,9 +6,10 @@ import { getFeaturedArticle, getStrapiMedia, getArticles, getPodcasts } from "@/
 export default async function Home() {
   // Fetch data
   const featuredArticleResponse = await getFeaturedArticle().catch(() => ({ data: null }))
+  console.log(featuredArticleResponse)
   const articlesResponse = await getArticles().catch(() => ({ data: [] }))
   const podcastsResponse = await getPodcasts().catch(() => ({ data: [] }))
-  // console.log(articlesResponse)
+  console.log(articlesResponse)
   // Extract the actual articles from the response
   const featuredArticles = featuredArticleResponse.data || []
   const articles = articlesResponse.data || []
@@ -16,7 +17,7 @@ export default async function Home() {
 
   // Get the first featured article if available
   const featuredArticle = featuredArticles.length > 0 ? featuredArticles[0] : null
-  // console.log(featuredArticle)
+  
   return (
     <main className="container mx-auto px-4 py-8">
       {/* Hero Section */}
