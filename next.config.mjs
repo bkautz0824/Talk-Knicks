@@ -3,11 +3,10 @@ const nextConfig = {
     images: {
       remotePatterns: [
         {
-          protocol: 'http',
-          hostname: 'localhost',
-          port: '1337',
-          pathname: '/uploads/**',
-        },
+        protocol: 'https',
+        hostname: 'media-cms.onrender.com',
+        pathname: '/uploads/**',
+      },
         // You can add production hostname when you deploy to production
         // {
         //   protocol: 'https',
