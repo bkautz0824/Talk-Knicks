@@ -18,7 +18,7 @@ const ListItem = ({ item, index }) => {
     const stats = item.stats || [];
     const accolades = item.accolades || [];
     const image = item.image;
-    
+    console.log(stats)
     // Format dates
     const formatDate = (dateString) => {
       if (!dateString) return '';
@@ -169,12 +169,21 @@ const ListItem = ({ item, index }) => {
                   <div className="mb-6">
                     <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-3">Stats</h3>
                     <div className="grid grid-cols-3 gap-2">
-                      {['Points', 'Rebounds', 'Assists', 'Steals', 'Blocks'].map((stat, idx) => (
-                        <div key={idx} className="bg-gray-50 dark:bg-gray-800 p-2 rounded-lg">
-                          <div className="text-xs uppercase text-gray-500 dark:text-gray-400">{stat}</div>
-                          <div className="text-xl font-bold text-gray-900 dark:text-white">--</div>
-                        </div>
-                      ))}
+                      {['Points', 'Rebounds', 'Assists', 'Steals', 'Blocks'].map((stat, idx) => {
+
+                        return(
+                          <div key={idx} className="bg-gray-50 dark:bg-gray-800 p-2 rounded-lg">
+                            <div className="text-xs uppercase text-gray-500 dark:text-gray-400">{stat}</div>
+                            <div className="text-xl font-bold text-gray-900 dark:text-white">{stats[idx]}</div>
+                          </div>
+                        )
+                        
+                      
+                      }
+
+                        
+                      
+                      )}
                     </div>
                   </div>
                 )}
