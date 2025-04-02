@@ -24,7 +24,7 @@ export default async function ListsPage() {
       const defaultListData = await getLivingListById(defaultListId);
       
       defaultList = defaultListData.data;
-      console.log(defaultList, "default list")
+      // console.log(defaultList, "default list")
     }
   } catch (error) {
     console.error('Error fetching lists:', error);
