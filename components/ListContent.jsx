@@ -18,7 +18,7 @@ export default function ListContent({ lists, defaultList }) {
       
       const response = await getLivingListById(listId);
       const list = response.data;
-      
+      console.log(response, "list by id")
       setSelectedList(list);
       setListItems(list.attributes?.items || list.items || []);
     } catch (error) {

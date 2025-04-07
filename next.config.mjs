@@ -13,7 +13,7 @@ const nextConfig = {
         //   hostname: 'your-production-strapi-domain.com',
         //   pathname: '/uploads/**',
         // },
-      ],
+    ]
     },
   };
   

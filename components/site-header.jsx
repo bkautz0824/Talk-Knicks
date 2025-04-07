@@ -22,7 +22,7 @@ export default function SiteHeader() {
                     <li>
                       <NavigationMenuLink asChild>
                         <Link 
-                          href="/lists/nba-rankings" 
+                          href="/lists" 
                           className="block p-3 space-y-1 hover:bg-accent rounded-md"
                         >
                           <div className="font-medium">NBA Player Rankings</div>
@@ -35,7 +35,7 @@ export default function SiteHeader() {
                     <li>
                       <NavigationMenuLink asChild>
                         <Link 
-                          href="/lists/prospects" 
+                          href="/lists" 
                           className="block p-3 space-y-1 hover:bg-accent rounded-md"
                         >
                           <div className="font-medium">Top Prospects</div>

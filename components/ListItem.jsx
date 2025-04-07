@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import {  getStrapiMedia } from '../lib/strapi/api';
+import PlayerAttributesRadar from './PlayerAttributeDisplay';
 
 const ListItem = ({ item, index }) => {
     const [expanded, setExpanded] = useState(false);
@@ -18,7 +19,9 @@ const ListItem = ({ item, index }) => {
     const stats = item.stats || [];
     const accolades = item.accolades || [];
     const image = item.image;
-    console.log(stats)
+    
+    const attributes = item.attributes
+    
     // Format dates
     const formatDate = (dateString) => {
       if (!dateString) return '';
@@ -39,7 +42,7 @@ const ListItem = ({ item, index }) => {
             onClick={() => setExpanded(!expanded)}
           >
             {/* Left side with Rank and Player Image */}
-            <div className="flex items-center py-4 md:min-w-[180px]">
+            <div className="flex items-center py-4 md:w-auto">
               {/* Rank */}
               <div className="flex flex-col items-center mr-4">
                 <span className="inline-flex w-auto border-b-2 border-red-600 dark:border-red-500 text-4xl font-bold mb-1">
@@ -85,21 +88,6 @@ const ListItem = ({ item, index }) => {
                 )}
               </div>
               
-              {/* Image thumbnail - always visible */}
-              <div className="w-12 h-12 md:w-16 md:h-16 relative rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                {image ? (
-                  <Image 
-                    src={getStrapiMedia(image)} 
-                    alt={title}
-                    fill
-                    className="object-cover"
-                  />
-                ) : (
-                  <svg className="w-6 h-6 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                )}
-              </div>
             </div>
             
             {/* Separator line */}
@@ -150,21 +138,24 @@ const ListItem = ({ item, index }) => {
                 </div>
                 
                 {/* Stats */}
-                {stats && stats.length > 0 ? (
-                  <div className="mb-6">
-                    <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-3">Stats</h3>
-                    <div className="grid grid-cols-2 gap-3">
-                      {stats.map((stat, idx) => (
-                        <div key={idx} className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
-                          <div className="text-xs uppercase text-gray-500 dark:text-gray-400">{stat.label || 'N/A'}</div>
-                          <div className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value || '0'}</div>
-                          {stat.detail && (
-                            <div className="text-xs text-gray-500 dark:text-gray-400">{stat.detail}</div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                {stats ? (
+                 <div className="mb-6">
+                 <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-3">Stats</h3>
+                 <div className="grid grid-cols-3 gap-2">
+                   {[
+                     { label: 'Points', value: stats?.points },
+                     { label: 'Rebounds', value: stats?.rebounds },
+                     { label: 'Assists', value: stats?.assists },
+                     { label: 'Steals', value: stats?.steals },
+                     { label: 'Blocks', value: stats?.blocks }
+                   ].map((stat, idx) => (
+                     <div key={idx} className="bg-gray-50 dark:bg-gray-800 p-2 rounded-lg">
+                       <div className="text-xs uppercase text-gray-500 dark:text-gray-400">{stat.label}</div>
+                       <div className="text-xl font-bold text-gray-900 dark:text-white">{stat.value || '0'}</div>
+                     </div>
+                   ))}
+                 </div>
+               </div>
                 ) : (
                   <div className="mb-6">
                     <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-3">Stats</h3>
@@ -189,48 +180,41 @@ const ListItem = ({ item, index }) => {
                 )}
                 
                 {/* Accolades */}
-                {accolades && accolades.length > 0 ? (
+                {accolades ? (
                   <div>
                     <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-3">Accolades</h3>
                     <div className="flex flex-wrap gap-4">
-                      {accolades.map((accolade, idx) => (
+                      {[
+                        { label: 'Rings', value: accolades.rings || 0 },
+                        { label: 'MVPs', value: accolades.mvps || 0 },
+                        { label: 'All-NBA', value: accolades.allNba || 0 }
+                      ].map((accolade, idx) => (
                         <div key={idx} className="flex flex-col items-center">
                           <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-1">
-                            {accolade.icon ? (
-                              <Image 
-                                src={getStrapiMedia(accolade.icon)} 
-                                alt={accolade.label} 
-                                width={30} 
-                                height={30}
-                              />
-                            ) : (
-                              <div className="text-lg font-bold text-red-600 dark:text-red-500">
-                                {accolade.count || 1}x
-                              </div>
-                            )}
+                            <div className="text-lg font-bold text-red-600 dark:text-red-500">
+                              {accolade.value > 0 ? `${accolade.value}x` : '--'}
+                            </div>
                           </div>
-                          <span className="text-xs text-center text-gray-700 dark:text-gray-300">
-                            {accolade.label || 'Award'}
-                          </span>
+                          <span className="text-xs text-center text-gray-700 dark:text-gray-300">{accolade.label}</span>
                         </div>
                       ))}
                     </div>
                   </div>
-                ) : (
-                  <div>
-                    <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-3">Accolades</h3>
-                    <div className="flex flex-wrap gap-4">
-                      {['Rings', 'All-NBA', 'MVPs'].map((accolade, idx) => (
-                        <div key={idx} className="flex flex-col items-center">
-                          <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-1">
-                            <div className="text-lg font-bold text-red-600 dark:text-red-500">--</div>
+                  ) : (
+                    <div>
+                      <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-3">Accolades</h3>
+                      <div className="flex flex-wrap gap-4">
+                        {['Rings', 'All-NBA', 'MVPs'].map((accolade, idx) => (
+                          <div key={idx} className="flex flex-col items-center">
+                            <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-1">
+                              <div className="text-lg font-bold text-red-600 dark:text-red-500">--</div>
+                            </div>
+                            <span className="text-xs text-center text-gray-700 dark:text-gray-300">{accolade}</span>
                           </div>
-                          <span className="text-xs text-center text-gray-700 dark:text-gray-300">{accolade}</span>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                 )}
               </div>
               
               {/* Main content - Description */}
@@ -243,6 +227,7 @@ const ListItem = ({ item, index }) => {
                 <div className="mt-4 text-xs text-gray-500 dark:text-gray-400">
                   Last updated: {formatDate(lastUpdate)}
                 </div>
+                <PlayerAttributesRadar attributes={attributes[0]}/>
               </div>
             </div>
           )}
